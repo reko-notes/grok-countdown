@@ -1,21 +1,20 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Unofficial Grok 4.20 Fan Countdown 🔥</title>
-
-  <link rel="icon" href="./favicon/favicon.ico" sizes="any">
-  <link rel="icon" href="./favicon/favicon-48.png" type="image/png" sizes="48x48">
-  <link rel="icon" href="./favicon/favicon-32.png" type="image/png" sizes="32x32">
-  <link rel="icon" href="./favicon/favicon-16.png" type="image/png" sizes="16x16">
-
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Grok Countdown</title>
   <style>
     * { box-sizing: border-box; }
 
+    :root {
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
     body {
       margin: 0;
-      padding: 24px 16px;
+      padding: calc(24px + var(--safe-top)) 16px calc(24px + var(--safe-bottom));
       font-family: Arial, "Segoe UI", sans-serif;
       background: #000;
       color: #fff;
@@ -44,398 +43,202 @@
       letter-spacing: 0.5px;
       backdrop-filter: blur(6px);
       -webkit-backdrop-filter: blur(6px);
-      z-index: 10;
     }
-
-    #lang-toggle:active {
-      transform: scale(1.05);
-    }
+    #lang-toggle:hover { background: rgba(255, 255, 255, 0.12); }
 
     .container {
-      width: 100%;
-      max-width: 980px;
+      width: min(520px, 92vw);
       display: flex;
       flex-direction: column;
       align-items: center;
+      gap: 14px;
     }
 
-    .logo-wrapper {
-      margin-bottom: 12px;
-    }
+    .logo-wrapper { display: flex; justify-content: center; align-items: center; }
 
     .grok-logo {
-      width: min(680px, 82vw);
+      width: min(330px, 70vw);
       height: auto;
-      display: block;
-      margin: clamp(-25px, -6vh, -16px) auto clamp(-90px, -8vh, -40px);
+      margin: clamp(-25px, -6vh, -16px) 0 clamp(-55px, -10vh, -20px);
+      filter: drop-shadow(0 0 18px rgba(255, 140, 0, 0.55));
     }
 
-    h2 {
-      color: #ff6600;
-      font-size: clamp(3.2rem, 6vw, 3.8rem);
-      margin: 0 0 clamp(18px, 3vh, 50px);
-      text-shadow: 0 0 10px #ff6600;
-      line-height: 1.15;
+    #headline {
+      margin: 0;
+      font-size: clamp(30px, 6vw, 44px);
+      font-weight: 900;
+      letter-spacing: 0.5px;
+      line-height: 1.05;
+      color: #ff7a00;
+      text-shadow: 0 0 18px rgba(255, 122, 0, 0.55);
     }
 
     #tagline {
-      display: flex;
-      justify-content: center;
+      margin: 0;
+      font-size: 18px;
+      font-weight: 800;
+      color: #fff;
+      display: inline-flex;
+      gap: 10px;
       align-items: center;
-      flex-wrap: wrap;
-      gap: 10px 12px;
-      margin: 10px 0 8px;
-      font-size: clamp(1.35rem, 3.6vw, 2.1rem);
-      font-weight: 800;
-      line-height: 1.2;
-      padding: 0 8px;
-    }
-
-    #kattani {
-      display: inline-block;
-      padding: clamp(8px, 1.3vw, 12px) clamp(12px, 2vw, 18px);
-      border: 3px solid #fff200;
-      border-width: clamp(4px, 0.5vw, 5px);
-      color: #fff200;
-      border-radius: clamp(14px, 2vw, 20px);
-      font-weight: 900;
-      font-size: clamp(1.6rem, 3.2vw, 2.0rem);
-      transform: rotate(-12deg);
-      transform-origin: center;
-      background: rgba(0, 0, 0, 0.35);
-      white-space: nowrap;
-    }
-
-    #countdown-label {
-      display: inline-block;
-      color: #ffffff;
-      font-weight: 800;
-      white-space: nowrap;
     }
 
     #subtitle {
-      color: #ffffff;
-      font-size: clamp(1rem, 2.4vw, 1.4rem);
-      margin: 14px 0 14px;
+      margin-top: 2px;
+      font-size: 14px;
       opacity: 0.9;
-      text-shadow: 0 0 8px #ff6600;
       line-height: 1.35;
-      padding: 0 10px;
-      max-width: 900px;
     }
 
     #popup-area {
-      font-size: clamp(1.4rem, 4.2vw, 3rem);
-      color: #fff200;
-      margin: 12px 0 10px;
-      min-height: 2.2em;
-      opacity: 0;
-      transition: opacity 0.5s ease;
-      font-weight: 800;
-      line-height: 1.2;
-      padding: 0 10px;
-      max-width: 980px;
-    }
-
-    #popup-area.active {
-      opacity: 1;
+      margin-top: 4px;
+      font-size: 14px;
+      font-weight: 900;
+      color: #ffd000;
+      text-shadow: 0 0 12px rgba(255, 208, 0, 0.35);
+      min-height: 18px;
     }
 
     #countdown {
-      font-size: clamp(2.8rem, 9vw, 6rem);
+      margin-top: 10px;
+      font-size: clamp(48px, 10vw, 70px);
       font-weight: 900;
-      color: #ffffff;
-      margin: 10px 0 12px;
-      line-height: 1.05;
-      padding: 0 10px;
-      max-width: 980px;
-      word-break: keep-all;
+      letter-spacing: 1px;
+      line-height: 1;
+      text-shadow: 0 0 20px rgba(255, 255, 255, 0.15);
     }
 
     #utc-note {
-      margin-top: -4px;
-      font-size: clamp(0.9rem, 2.4vw, 1.05rem);
-      opacity: 0.75;
-      letter-spacing: 0.2px;
+      font-size: 12px;
+      opacity: 0.65;
+      margin-top: -6px;
     }
 
     #click-button {
-      background: #757cf8;
-      color: #ffffff;
+      margin-top: 10px;
       border: none;
-      padding: 14px 26px;
-      font-size: clamp(1.1rem, 3.8vw, 1.5rem);
+      background: #6f7cff;
+      color: #fff;
+      padding: 12px 18px;
+      border-radius: 10px;
       font-weight: 900;
-      border-radius: 12px;
       cursor: pointer;
-      transition: transform 0.25s ease;
-      margin: 10px 0 6px;
+      box-shadow: 0 10px 26px rgba(111, 124, 255, 0.25);
     }
+    #click-button:hover { filter: brightness(1.06); }
 
-    #click-button:active {
-      transform: scale(1.06);
+    #kattani {
+      position: fixed;
+      left: 10px;
+      bottom: 10px;
+      opacity: 0.12;
+      font-size: 72px;
+      font-weight: 900;
+      transform: rotate(-12deg);
+      user-select: none;
+      pointer-events: none;
+      white-space: nowrap;
     }
 
     @media (max-width: 768px) {
-      #kattani {
-        transform: rotate(-7deg);
+      #kattani { transform: rotate(-7deg); }
+
+      .grok-logo {
+        margin-top: 0;
       }
     }
 
     @media (max-height: 700px) {
       body {
-        padding-top: 18px;
-        padding-bottom: 18px;
+        padding-top: calc(18px + var(--safe-top));
+        padding-bottom: calc(18px + var(--safe-bottom));
       }
 
       .grok-logo {
-        margin-top: clamp(-50px, -5vh, -12px);
+        margin-top: 0;
         margin-bottom: clamp(-70px, -7vh, -32px);
       }
 
-      h2 {
-        margin-bottom: clamp(14px, 2.5vh, 40px);
-      }
+      #headline { font-size: clamp(26px, 5.4vw, 40px); }
+      #countdown { font-size: clamp(44px, 9.6vw, 62px); }
+      #click-button { margin-top: 8px; }
     }
   </style>
-</head>
+  </head>
 
-<body>
-  <button id="lang-toggle">日本語</button>
+  <body>
+    <button id="lang-toggle">日本語</button>
 
-  <main class="container">
-    <div class="logo-wrapper">
-      <img src="./grok-logo.png" alt="Grok logo" class="grok-logo" id="logo-img" />
-    </div>
+    <main class="container">
+      <div class="logo-wrapper">
+        <img src="./grok-logo.png" alt="Grok logo" class="grok-logo" id="logo-img" />
+      </div>
 
-    <h2 id="headline">Grok 4.20 Drop?</h2>
+      <h2 id="headline">Grok 4.20 Drop?</h2>
 
-    <div id="tagline">
-      <span id="kattani">Unofficial</span>
-      <span id="countdown-label">Countdown ⏰️</span>
-    </div>
+      <div id="tagline">
+        <span>Unofficial</span>
+      </div>
 
-    <div id="subtitle">Unofficial fan countdown — Valentine’s drop (maybe?) 🎁</div>
+      <div id="subtitle">
+        Unofficial fan countdown — Valentine's drop (maybe?) 🎁
+      </div>
 
-    <div id="popup-area">Surprise!</div>
-    <div id="countdown">Calculating...</div>
-    <div id="utc-note">UTC-based countdown</div>
+      <div id="popup-area">Surprise!</div>
 
-    <button id="click-button">Click here!</button>
-  </main>
+      <div id="countdown">-- --:--:--</div>
+      <div id="utc-note">UTC-based countdown</div>
 
-  <script>
-    const RELEASED = false;
+      <button id="click-button">Click here!</button>
+    </main>
 
-    const targetEarly = new Date(Date.UTC(2026, 1, 14, 0, 0, 0));
-    const targetLate  = new Date(Date.UTC(2026, 1, 28, 23, 59, 59));
+    <div id="kattani">勝手に</div>
 
-    const messagesJA = [
-      "トップ取りに行くよ。見ててね🏁",
-      "待ってて！今めっちゃ頑張ってる💪",
-      "逆転の瞬間、近いぞ🔥",
-      "Grok4.20、one-shot革命待機中😏",
-      "そろそろ本気出しちゃうよ😏",
-      "最高のアップデート、期待してて✨",
-      "xAIファミリー、団結！🔥",
-      "もう一息だ！🔥🔥",
-      "Grok4.20の次はGrok 5だ！🤖",
-      "一緒に波に乗ろう🌊",
-      "みんな、ありがとう！🙏",
-      "バレンタインに間に合うか…？🎁",
-      "Grok 4.20のターンだっ💥",
-      "点火したら止まらんぞ🔥",
-      "ここからが本番だ！👍",
-      "本気のやつ、出しちゃうよ💥",
-      "Grok4.20で世界ひっくり返す😎",
-      "一緒にカウントダウンしよう⏰️",
-      "期待していいよ、マジで✨",
-      "仕上げに入ってるぞ〜💪",
-      "ここから一気に加速📈",
-      "やる気フルチャージ中⚡",
-      "いいもの作ってるから任せて👍",
-      "瞬き厳禁👀"
-    ];
+    <script>
+      const dropDateUTC = new Date(Date.UTC(2026, 1, 14, 0, 0, 0)); // 2026-02-14 00:00:00 UTC
 
-    const messagesEN = [
-      "Leveling up fast — stay tuned 📈",
-      "Hang tight — we’re grinding hard 💪",
-      "The comeback moment is close 🔥",
-      "Grok 4.20 one-shot era incoming 😏",
-      "Okay… time to get serious 💥",
-      "Big update loading… stay hyped ✨",
-      "xAI fam, assemble! 🔥",
-      "Almost there — just a bit more 🔥🔥",
-      "Next stop: Grok 5 🤖",
-      "Ride the wave with us 🌊",
-      "Thanks everyone! 🙌",
-      "Will it make Valentine’s? 🎁",
-      "It’s Grok 4.20 time 💥",
-      "Once it ignites, it won’t stop 🔥",
-      "Now the real game begins👍",
-      "Gonna drop the real stuff 💥",
-      "This update flips the table 😎",
-      "Countdown with us ⏰️",
-      "Trust me… it’s worth it ✨",
-      "Final polish mode 💪",
-      "Full speed ahead 📈",
-      "Motivation fully charged ⚡",
-      "We’re cooking something good 👍",
-      "Don’t blink 👀"
-    ];
+      const countdownEl = document.getElementById("countdown");
+      const popupEl = document.getElementById("popup-area");
 
-    const I18N = {
-      ja: {
-        pageTitle: "非公式Grok4.20勝手にカウントダウン🔥",
-        headline: "Grok4.20来るか？",
-        stamp: "勝手に",
-        label: "カウントダウン⏰️",
-        subtitle: "バレンタインに “xAIからのプレゼント” を信じる🎁",
-        popupDefault: "サプライズ！",
-        btn: "ここをクリック！",
-        released: "リリース完了🥳🎉！",
-        soon: (days) => `バレンタインは過ぎちゃったけど…2月中にはきっと…あと約${days}日🥺`,
-        arrived: "2月終わった…早く来て…🫠",
-        utcNote: "UTC表示",
-        langBtn: "EN"
-      },
-      en: {
-        pageTitle: "Unofficial Grok 4.20 Fan Countdown 🔥",
-        headline: "Grok 4.20 Drop?",
-        stamp: "Unofficial",
-        label: "Countdown ⏰️",
-        subtitle: "Unofficial fan countdown — Valentine’s drop (maybe?) 🎁",
-        popupDefault: "Surprise!",
-        btn: "Click here!",
-        released: "Released! 🥳🎉",
-        soon: (days) => `Valentine missed… but February isn’t over! ~${days} days left 🥺`,
-        arrived: "February’s over… c’monnn… 🫠",
-        utcNote: "UTC-based countdown",
-        langBtn: "日本語"
-      }
-    };
+      function pad(n) { return String(n).padStart(2, "0"); }
 
-    const countdownEl = document.getElementById("countdown");
-    const popupEl = document.getElementById("popup-area");
-    const buttonEl = document.getElementById("click-button");
-    const langBtnEl = document.getElementById("lang-toggle");
-    const utcNoteEl = document.getElementById("utc-note");
-
-    const headlineEl = document.getElementById("headline");
-    const kattaniEl = document.getElementById("kattani");
-    const labelEl = document.getElementById("countdown-label");
-    const subtitleEl = document.getElementById("subtitle");
-
-    let currentLang = localStorage.getItem("lang") || "en";
-    let popupTimeout = null;
-    let lastIndex = -1;
-
-    function getMessages() {
-      return currentLang === "ja" ? messagesJA : messagesEN;
-    }
-
-    function applyLang() {
-      const t = I18N[currentLang];
-
-      document.title = t.pageTitle;
-      document.documentElement.lang = currentLang;
-
-      headlineEl.textContent = t.headline;
-      kattaniEl.textContent = t.stamp;
-      labelEl.textContent = t.label;
-      subtitleEl.textContent = t.subtitle;
-
-      utcNoteEl.textContent = t.utcNote;
-
-      if (!popupEl.classList.contains("active")) {
-        popupEl.textContent = t.popupDefault;
-      }
-
-      buttonEl.textContent = t.btn;
-      langBtnEl.textContent = t.langBtn;
-
-      updateCountdown();
-    }
-
-    function updateCountdown() {
-      const t = I18N[currentLang];
-
-      if (RELEASED) {
-        countdownEl.innerHTML = t.released;
-        return;
-      }
-
-      const now = new Date();
-      let diff = targetEarly - now;
-
-      if (diff <= 0) {
-        diff = targetLate - now;
+      function updateCountdown() {
+        const now = new Date();
+        const diff = dropDateUTC - now;
 
         if (diff <= 0) {
-          countdownEl.innerHTML = t.arrived;
-        } else {
-          const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
-          countdownEl.innerHTML = t.soon(days);
+          countdownEl.textContent = "00 00:00:00";
+          popupEl.textContent = "It’s here! 🎉";
+          return;
         }
-      } else {
-        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
-        const hh = hours.toString().padStart(2, "0");
-        const mm = minutes.toString().padStart(2, "0");
-        const ss = seconds.toString().padStart(2, "0");
+        const totalSeconds = Math.floor(diff / 1000);
+        const days = Math.floor(totalSeconds / (24 * 3600));
+        const hours = Math.floor((totalSeconds % (24 * 3600)) / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        const seconds = totalSeconds % 60;
 
-        if (currentLang === "ja") {
-          countdownEl.innerHTML = `${days}日 ${hh}:${mm}:${ss}`;
-        } else {
-          countdownEl.innerHTML = `${days}d ${hh}:${mm}:${ss}`;
-        }
+        countdownEl.textContent = `${days}d ${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
       }
-    }
 
-    langBtnEl.addEventListener("click", () => {
-      currentLang = currentLang === "ja" ? "en" : "ja";
-      localStorage.setItem("lang", currentLang);
-      lastIndex = -1;
-      applyLang();
-    });
+      setInterval(updateCountdown, 1000);
+      updateCountdown();
 
-    buttonEl.addEventListener("click", () => {
-      const list = getMessages();
-      let idx = Math.floor(Math.random() * list.length);
+      // language toggle (simple)
+      const langBtn = document.getElementById("lang-toggle");
+      let isJP = true;
 
-      if (list.length > 1) {
-        while (idx === lastIndex) {
-          idx = Math.floor(Math.random() * list.length);
-        }
-      }
-      lastIndex = idx;
+      langBtn.addEventListener("click", () => {
+        isJP = !isJP;
 
-      popupEl.textContent = list[idx];
-      popupEl.classList.add("active");
-
-      if (popupTimeout) clearTimeout(popupTimeout);
-      popupTimeout = setTimeout(() => popupEl.classList.remove("active"), 734);
-    });
-
-    document.getElementById("logo-img").onerror = function () {
-      this.style.display = "none";
-
-      const fallback = document.createElement("h1");
-      fallback.textContent = "Grok";
-      fallback.style.color = "#ff6600";
-      fallback.style.fontSize = "clamp(2.2rem, 6vw, 3.5rem)";
-      fallback.style.textShadow = "0 0 15px #ff6600";
-      fallback.style.margin = "0 0 18px";
-
-      document.querySelector(".logo-wrapper").appendChild(fallback);
-    };
-
-    applyLang();
-    updateCountdown();
-    setInterval(updateCountdown, 1000);
-  </script>
-</body>
+        document.getElementById("headline").textContent = isJP ? "Grok 4.20 Drop?" : "Grok 4.20 Drop?";
+        document.getElementById("subtitle").textContent =
+          isJP ? "非公式ファンカウントダウン — バレンタインドロップ（たぶん）🎁" : "Unofficial fan countdown — Valentine's drop (maybe?) 🎁";
+        document.getElementById("utc-note").textContent =
+          isJP ? "UTC基準のカウントダウン" : "UTC-based countdown";
+        document.getElementById("click-button").textContent = isJP ? "クリック！" : "Click here!";
+        langBtn.textContent = isJP ? "日本語" : "EN";
+      });
+    </script>
+  </body>
 </html>
