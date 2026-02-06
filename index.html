@@ -185,32 +185,27 @@
     }
 
     @media (max-width: 768px) {
-      #kattani {
-        transform: rotate(-7deg);
-      }
+      #kattani { transform: rotate(-7deg); }
 
-      /* ✅ スマホではロゴを上に引っ張らない（欠け防止） */
-      .grok-logo {
-        margin-top: 0;
+      /* === mobile only tweak === */
+      .grok-logo{
+        margin-top: 0 !important;
       }
     }
 
     @media (max-height: 700px) {
-      /* ✅ 低い画面でもsafe-area込みにする */
       body {
+        /* ✅ ここもsafe-areaを維持（上書きで事故らないように） */
         padding-top: calc(18px + var(--safe-top));
         padding-bottom: calc(18px + var(--safe-bottom));
       }
 
-      /* ✅ 低い画面では特に欠けやすいので上に引っ張らない */
       .grok-logo {
-        margin-top: 0;
+        margin-top: clamp(-50px, -5vh, -12px);
         margin-bottom: clamp(-70px, -7vh, -32px);
       }
 
-      h2 {
-        margin-bottom: clamp(14px, 2.5vh, 40px);
-      }
+      h2 { margin-bottom: clamp(14px, 2.5vh, 40px); }
     }
   </style>
 </head>
@@ -402,11 +397,9 @@
         const mm = minutes.toString().padStart(2, "0");
         const ss = seconds.toString().padStart(2, "0");
 
-        if (currentLang === "ja") {
-          countdownEl.innerHTML = `${days}日 ${hh}:${mm}:${ss}`;
-        } else {
-          countdownEl.innerHTML = `${days}d ${hh}:${mm}:${ss}`;
-        }
+        countdownEl.innerHTML = (currentLang === "ja")
+          ? `${days}日 ${hh}:${mm}:${ss}`
+          : `${days}d ${hh}:${mm}:${ss}`;
       }
     }
 
@@ -422,9 +415,7 @@
       let idx = Math.floor(Math.random() * list.length);
 
       if (list.length > 1) {
-        while (idx === lastIndex) {
-          idx = Math.floor(Math.random() * list.length);
-        }
+        while (idx === lastIndex) idx = Math.floor(Math.random() * list.length);
       }
       lastIndex = idx;
 
@@ -454,3 +445,4 @@
   </script>
 </body>
 </html>
+
